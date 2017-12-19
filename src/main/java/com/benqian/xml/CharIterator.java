@@ -14,6 +14,7 @@ public class CharIterator implements Iterator<Character> {
     private Reader reader = null;
     private CharBuffer buffer = null;
     private int sbIndex = 0;
+    private int offset = 0;
     private StringBuilder sb;
     private String s = null;
 
@@ -61,6 +62,7 @@ public class CharIterator implements Iterator<Character> {
             } else {
                 this.s = this.s.substring(1);
             }
+            offset++;
             return x;
         } else {
             if (sbIndex == sb.length()) {
@@ -69,6 +71,7 @@ public class CharIterator implements Iterator<Character> {
             if(sbIndex == sb.length()) {
                 throw new NoSuchElementException();
             }
+            offset++;
             return sb.charAt(sbIndex++);
         }
     }
@@ -92,11 +95,34 @@ public class CharIterator implements Iterator<Character> {
                 int more = sbIndex+size - sb.length();
                 this.s = sb.substring(sbIndex);
                 fetchIgnoreException();
-                return this.s + sb.substring(sbIndex,sbIndex+more);
+                return this.s + sb.substring(sbIndex, Math.min(sbIndex+more, sb.length()));
             } else {
-                return sb.substring(sbIndex, sbIndex+size);
+                return sb.substring(sbIndex, Math.min(sbIndex+size,sb.length()));
             }
         }
+    }
+
+    public boolean isNextChar(char c) {
+        String s = lookAhead(1);
+        return s.length() == 1 && s.charAt(0) == c;
+    }
+
+    public char lookupChar() {
+        String s = lookAhead(1);
+        if (s.length() == 1) {
+            return s.charAt(0);
+        } else {
+            return Character.MIN_VALUE;
+        }
+    }
+
+    public void forward(int charSize) {
+        for(int i = 0; i < charSize; i++) next();
+    }
+
+
+    public int getOffset() {
+        return offset;
     }
 
 }

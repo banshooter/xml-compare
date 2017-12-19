@@ -7,13 +7,24 @@ import java.util.TreeMap;
  * Created by benqian on 12/14/17.
  */
 public class Node {
+    public static Map<String, String> EmptyAttributes() {
+        return new TreeMap<String, String>();
+    }
+
     private String tagName;
-    private Map<String, String> attributes = new TreeMap<String, String>();
+    private Map<String, String> attributes = EmptyAttributes();
     private Map<Node, Integer> nodes = new TreeMap<Node, Integer>();
 
     public Node() {
     }
 
+    public Node(String tagName) {
+        this.tagName = tagName;
+    }
+    public Node(String tagName, Map<String, String> attributes) {
+        this.tagName = tagName;
+        this.attributes = attributes;
+    }
     public Node(String tagName, Map<String, String> attributes, Map<Node, Integer> nodes) {
         this.tagName = tagName;
         this.attributes = attributes;

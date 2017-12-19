@@ -1,5 +1,7 @@
 package com.benqian.xml;
 
+import java.text.ParseException;
+
 /**
  * Created by benqian on 12/14/17.
  */
@@ -7,9 +9,9 @@ public class XML {
     private String xmlString = null;
     private Node node = null;
 
-    public XML(String xmlString) {
+    public XML(String xmlString) throws ParseException {
         this.xmlString = xmlString;
-        this.node = XMLParser.getInstance().parse(xmlString);
+        this.node = XMLParser.parse(xmlString);
     }
 
     public String toString() {
