@@ -1,5 +1,6 @@
 package com.benqian.xml;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -12,8 +13,9 @@ public class Node {
     }
 
     private String tagName;
+    private String value;
     private Map<String, String> attributes = EmptyAttributes();
-    private Map<Node, Integer> nodes = new TreeMap<Node, Integer>();
+    private Map<Node, Integer> nodes = new HashMap<Node, Integer>();
 
     public Node() {
     }
@@ -24,6 +26,11 @@ public class Node {
     public Node(String tagName, Map<String, String> attributes) {
         this.tagName = tagName;
         this.attributes = attributes;
+    }
+    public Node(String tagName, Map<String, String> attributes, String value) {
+        this.tagName = tagName;
+        this.attributes = attributes;
+        this.value = value.trim();
     }
     public Node(String tagName, Map<String, String> attributes, Map<Node, Integer> nodes) {
         this.tagName = tagName;
@@ -47,12 +54,34 @@ public class Node {
         this.attributes = attributes;
     }
 
+    public Node addAttribute(String name, String value) {
+        this.attributes.put(name, value);
+        return this;
+    }
+
     public Map<Node, Integer> getNodes() {
         return nodes;
     }
 
     public void setNodes(Map<Node, Integer> nodes) {
         this.nodes = nodes;
+    }
+
+    public Node addNode(Node n) {
+        if (nodes.containsKey(n)) {
+            nodes.put(n, nodes.get(n) + 1);
+        } else {
+            nodes.put(n, 1);
+        }
+        return this;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 
     @Override
@@ -62,14 +91,22 @@ public class Node {
 
         Node node = (Node) o;
 
-        if (!getTagName().equals(node.getTagName())) return false;
+        if (!stringEquals(getTagName(), node.getTagName())) return false;
+        if (!stringEquals(getValue(), node.getValue())) return false;
         if (!getAttributes().equals(node.getAttributes())) return false;
         return getNodes().equals(node.getNodes());
     }
 
+    private boolean stringEquals(String a, String b) {
+        if (a == b) return true;
+        if ((a == null && b != null) || (a != null && b == null)) return false;
+        return a.equals(b);
+    }
+
     @Override
     public int hashCode() {
-        int result = getTagName().hashCode();
+        int result = getTagName()==null?0:getTagName().hashCode();
+        result = 31 * result + (getValue()==null?0:getValue().hashCode());
         result = 31 * result + getAttributes().hashCode();
         result = 31 * result + getNodes().hashCode();
         return result;

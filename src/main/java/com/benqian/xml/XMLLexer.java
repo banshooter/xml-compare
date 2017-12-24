@@ -6,9 +6,9 @@ import java.util.Set;
 
 public class XMLLexer implements XMLReserved {
 
-    public static boolean isTagBegin(CharIterator stream) throws ParseException {
+    public static boolean tagBegin(CharIterator stream) throws ParseException {
         skipCommentAndWhiteSpace(stream);
-        if (stream.isNextChar(TagBegin)) {
+        if (isTagBegin(stream)) {
             stream.next();
             return true;
         }
@@ -16,19 +16,30 @@ public class XMLLexer implements XMLReserved {
     }
 
 
-    public static boolean isTagEnd(CharIterator stream) throws ParseException {
+    public static boolean tagEnd(CharIterator stream) throws ParseException {
         skipCommentAndWhiteSpace(stream);
-        if (stream.isNextChar(TagEnd)) {
+        if (isTagEnd(stream)) {
             stream.next();
             return true;
         }
         return false;
     }
 
+    public static boolean isTagBegin(CharIterator stream) {
+        return stream.isNextChar(TagBegin);
+    }
+
+    public static boolean isTagEnd(CharIterator stream) {
+        return stream.isNextChar(TagEnd);
+    }
 
     public static boolean isTagEndWithNodeEnd(CharIterator stream) throws ParseException {
-        skipCommentAndWhiteSpace(stream);
         return lookAheadEquals(stream, TagEndWithNodeEnd);
+    }
+
+    public static boolean tagEndWithNodeEnd(CharIterator stream) throws ParseException {
+        skipCommentAndWhiteSpace(stream);
+        return lookAheadEqualsAndSeek(stream, TagEndWithNodeEnd);
     }
 
 
@@ -38,7 +49,7 @@ public class XMLLexer implements XMLReserved {
         if (stream.isNextChar('"')) {
             stream.next();
             while(!stream.isNextChar('"')) {
-                if (lookAheadEquals(stream, "\\\"")) {
+                if (lookAheadEqualsAndSeek(stream, "\\\"")) {
                     sb.append('"');
                 } else {
                     sb.append(stream.next());
@@ -93,12 +104,12 @@ public class XMLLexer implements XMLReserved {
             }
             if (sb.length() > 0 && stream.isNextChar(':')) {
                 sb.append(stream.next());
+                String s = elementNameExpr(stream);
+                if (s == null) {
+                    throw new ParseException("expect character after :", 0);
+                }
+                sb.append(s);
             }
-            String s = elementNameExpr(stream);
-            if (s == null) {
-                throw new ParseException("expect character after :", 0);
-            }
-            sb.append(s);
             return sb.toString();
         } else {
             return null;
@@ -114,7 +125,10 @@ public class XMLLexer implements XMLReserved {
 
 
     public static boolean lookAheadEquals(CharIterator stream, String s) {
-        boolean result = stream.hasNext() && s.equals(stream.lookAhead(s.length()));
+        return stream.hasNext() && s.equals(stream.lookAhead(s.length()));
+    }
+    public static boolean lookAheadEqualsAndSeek(CharIterator stream, String s) {
+        boolean result = lookAheadEquals(stream, s);
         if (result) {
             for (int i = 0; i < s.length(); i++) stream.next();
         }
@@ -167,10 +181,10 @@ public class XMLLexer implements XMLReserved {
     }
 
     private static boolean isCommentBegin(CharIterator stream) {
-        return lookAheadEquals(stream, CommentBegin);
+        return lookAheadEqualsAndSeek(stream, CommentBegin);
     }
     private static boolean isCommentEnd(CharIterator stream) {
-        return lookAheadEquals(stream, CommentEnd);
+        return lookAheadEqualsAndSeek(stream, CommentEnd);
     }
 
     private static boolean isAlphaNumeric(Character c) {

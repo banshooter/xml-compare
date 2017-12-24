@@ -8,51 +8,51 @@ import java.text.ParseException;
 
 public class XMLLexerTest {
     @Test
-    public void testIsTagBegin() throws IOException, ParseException {
+    public void testTagBegin() throws IOException, ParseException {
         CharIterator stream = new CharIterator(new StringReader("123456"), 1024);
-        Assert.assertFalse(XMLLexer.isTagBegin(stream));
+        Assert.assertFalse(XMLLexer.tagBegin(stream));
         stream = new CharIterator(new StringReader(""), 1024);
-        Assert.assertFalse(XMLLexer.isTagBegin(stream));
+        Assert.assertFalse(XMLLexer.tagBegin(stream));
         stream = new CharIterator(new StringReader("<"), 1024);
-        Assert.assertTrue(XMLLexer.isTagBegin(stream));
+        Assert.assertTrue(XMLLexer.tagBegin(stream));
         stream = new CharIterator(new StringReader("<!----><"), 1024);
-        Assert.assertTrue(XMLLexer.isTagBegin(stream));
+        Assert.assertTrue(XMLLexer.tagBegin(stream));
         stream = new CharIterator(new StringReader("<!--1--><"), 1024);
-        Assert.assertTrue(XMLLexer.isTagBegin(stream));
+        Assert.assertTrue(XMLLexer.tagBegin(stream));
         stream = new CharIterator(new StringReader(" <!--1--> <"), 1024);
-        Assert.assertTrue(XMLLexer.isTagBegin(stream));
+        Assert.assertTrue(XMLLexer.tagBegin(stream));
     }
 
     @Test
-    public void testIsTagEnd() throws IOException, ParseException {
+    public void testTagEnd() throws IOException, ParseException {
         CharIterator stream = new CharIterator(new StringReader("123456"), 1024);
-        Assert.assertFalse(XMLLexer.isTagEnd(stream));
+        Assert.assertFalse(XMLLexer.tagEnd(stream));
         stream = new CharIterator(new StringReader(""), 1024);
-        Assert.assertFalse(XMLLexer.isTagEnd(stream));
+        Assert.assertFalse(XMLLexer.tagEnd(stream));
         stream = new CharIterator(new StringReader(">"), 1024);
-        Assert.assertTrue(XMLLexer.isTagEnd(stream));
+        Assert.assertTrue(XMLLexer.tagEnd(stream));
         stream = new CharIterator(new StringReader("<!---->>"), 1024);
-        Assert.assertTrue(XMLLexer.isTagEnd(stream));
+        Assert.assertTrue(XMLLexer.tagEnd(stream));
         stream = new CharIterator(new StringReader("<!--1-->>"), 1024);
-        Assert.assertTrue(XMLLexer.isTagEnd(stream));
+        Assert.assertTrue(XMLLexer.tagEnd(stream));
         stream = new CharIterator(new StringReader(" <!--1--> >"), 1024);
-        Assert.assertTrue(XMLLexer.isTagEnd(stream));
+        Assert.assertTrue(XMLLexer.tagEnd(stream));
     }
 
     @Test
-    public void testIsTagEndWithNodeEnd() throws IOException, ParseException {
+    public void testTagEndWithNodeEnd() throws IOException, ParseException {
         CharIterator stream = new CharIterator(new StringReader("123456"), 1024);
-        Assert.assertFalse(XMLLexer.isTagEndWithNodeEnd(stream));
+        Assert.assertFalse(XMLLexer.tagEndWithNodeEnd(stream));
         stream = new CharIterator(new StringReader(""), 1024);
-        Assert.assertFalse(XMLLexer.isTagEndWithNodeEnd(stream));
+        Assert.assertFalse(XMLLexer.tagEndWithNodeEnd(stream));
         stream = new CharIterator(new StringReader("/>"), 1024);
-        Assert.assertTrue(XMLLexer.isTagEndWithNodeEnd(stream));
+        Assert.assertTrue(XMLLexer.tagEndWithNodeEnd(stream));
         stream = new CharIterator(new StringReader("<!---->/>"), 1024);
-        Assert.assertTrue(XMLLexer.isTagEndWithNodeEnd(stream));
+        Assert.assertTrue(XMLLexer.tagEndWithNodeEnd(stream));
         stream = new CharIterator(new StringReader("<!--1-->/>"), 1024);
-        Assert.assertTrue(XMLLexer.isTagEndWithNodeEnd(stream));
+        Assert.assertTrue(XMLLexer.tagEndWithNodeEnd(stream));
         stream = new CharIterator(new StringReader(" <!--1--> />"), 1024);
-        Assert.assertTrue(XMLLexer.isTagEndWithNodeEnd(stream));
+        Assert.assertTrue(XMLLexer.tagEndWithNodeEnd(stream));
     }
 
     @Test
