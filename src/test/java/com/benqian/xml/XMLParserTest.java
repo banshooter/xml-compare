@@ -58,4 +58,15 @@ public class XMLParserTest {
         Assert.assertEquals(expected, XMLParser.parse("<T x=\"X\" y=10 z=\"Z\"><A/><A></A><B ba=\"BO\"><C/></B></T>"));
     }
 
+
+    @Test(expected = ParseException.class)
+    public void testNoEndStartThrow() throws IOException, ParseException {
+        XMLParser.parse("<T><ERROR error=500</T>");
+    }
+
+    @Test(expected = ParseException.class)
+    public void testNoEndTagThrow() throws IOException, ParseException {
+        XMLParser.parse("<T><ERROR error=500></T>");
+    }
+
 }
