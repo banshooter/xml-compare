@@ -1,9 +1,9 @@
-package com.benqian.xml;
+package com.jarunj.xml;
 
 import java.text.ParseException;
 
 /**
- * Created by benqian on 12/14/17.
+ * Created by banshooter on 12/14/17.
  */
 public class XML {
     private String xmlString = null;

@@ -1,4 +1,4 @@
-package com.benqian.xml;
+package com.jarunj.xml;
 
 import org.junit.Test;
 import org.junit.Assert;
@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.text.ParseException;
 
 /**
- * Created by benqian on 12/24/17.
+ * Created by banshooter on 12/24/17.
  */
 public class XMLParserTest {
     @Test

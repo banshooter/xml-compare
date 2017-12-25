@@ -1,11 +1,11 @@
-package com.benqian.xml;
+package com.jarunj.xml;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * Created by benqian on 12/14/17.
+ * Created by banshooter on 12/14/17.
  */
 public class Node {
     public static Map<String, String> EmptyAttributes() {

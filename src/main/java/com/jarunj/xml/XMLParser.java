@@ -1,4 +1,4 @@
-package com.benqian.xml;
+package com.jarunj.xml;
 
 import java.io.StringReader;
 import java.text.ParseException;
@@ -8,7 +8,7 @@ import java.util.TreeMap;
 
 
 /**
- * Created by benqian on 12/14/17.
+ * Created by banshooter on 12/14/17.
  */
 public class XMLParser {
     public static Node parse(String xmlString) throws ParseException {

@@ -1,4 +1,4 @@
-package com.benqian.xml;
+package com.jarunj.xml;
 
 import org.junit.Test;
 import org.junit.Assert;

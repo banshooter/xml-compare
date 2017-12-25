@@ -1,7 +1,7 @@
-package com.benqian.xml;
+package com.jarunj.xml;
 
 /**
- * Created by benqian on 12/18/17.
+ * Created by banshooter on 12/18/17.
  */
 interface XMLReserved {
     public static final Character TagBegin = '<';

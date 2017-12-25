@@ -1,4 +1,4 @@
-package com.benqian.xml;
+package com.jarunj.xml;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * Created by benqian on 12/14/17.
+ * Created by banshooter on 12/14/17.
  */
 public class CharIterator implements Iterator<Character> {
 
