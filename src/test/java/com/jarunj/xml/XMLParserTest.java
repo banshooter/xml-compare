@@ -21,14 +21,14 @@ public class XMLParserTest {
 
     @Test
     public void testParseSimpleNodeWithAttributes() throws IOException, ParseException {
-        Node expected = new Node("T")
+        Node expected = new Node("ns:T")
                 .addAttribute("x", "X")
-                .addAttribute("y", "10")
+                .addAttribute("i:y", "10")
                 .addAttribute("z", "Z");
-        Assert.assertEquals(expected, XMLParser.parse("<T x=\"X\" y=10 z=\"Z\"/>"));
-        Assert.assertEquals(expected, XMLParser.parse("<T y=10 x=\"X\" z=\"Z\"/>"));
-        Assert.assertEquals(expected, XMLParser.parse("<T z=\"Z\"x=\"X\" y=10/>"));
-        Assert.assertEquals(expected, XMLParser.parse("<T z=\"Z\"x=\"X\" y=10></T>"));
+        Assert.assertEquals(expected, XMLParser.parse("<ns:T x=\"X\" i:y=10 z=\"Z\"/>"));
+        Assert.assertEquals(expected, XMLParser.parse("<ns:T i:y=10 x=\"X\" z=\"Z\"/>"));
+        Assert.assertEquals(expected, XMLParser.parse("<ns:T z=\"Z\"x=\"X\" i:y=10/>"));
+        Assert.assertEquals(expected, XMLParser.parse("<ns:T z=\"Z\"x=\"X\" i:y=10></ns:T>"));
     }
 
     @Test
