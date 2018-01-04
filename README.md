@@ -9,11 +9,11 @@ xml-compare is mainly built for using in unit tests to comparing 2 xmls and also
 
 ## Example
 add this in project's pom.xml:
-<dependency>
-  <groupId>com.jarunj.xml</groupId>
-  <artifactId>xml-compare</artifactId>
-  <version>0.7.0</version>
-</dependency>
+&lt;dependency&gt;
+&nbsp;&nbsp;&lt;groupId&gt;com.jarunj.xml&lt;/groupId&gt;
+&nbsp;&nbsp;&lt;artifactId&gt;xml-compare&lt;/artifactId&gt;
+&nbsp;&nbsp;&lt;version&gt;0.7.0&lt;/version&gt;
+&lt;/dependency&gt;
 
 ```java
     import com.jarunj.xml.XML;
