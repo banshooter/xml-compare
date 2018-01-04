@@ -8,6 +8,13 @@
 xml-compare is mainly built for using in unit tests to comparing 2 xmls and also as an example of simple and stupid lexer and parser of XML.
 
 ## Example
+add this in project's pom.xml:
+<dependency>
+  <groupId>com.jarunj.xml</groupId>
+  <artifactId>xml-compare</artifactId>
+  <version>0.7.0</version>
+</dependency>
+
 ```java
     import com.jarunj.xml.XML;
     .
