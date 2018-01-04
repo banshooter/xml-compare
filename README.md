@@ -18,11 +18,11 @@ add this in project's pom.xml:
 ```
 
 ```java
-    import com.jarunj.xml.XML;
-    .
-    .
-    .
-    XML xml1 = new XML("<ns:Legacies><Legacy version=\"3.0.0\" year=10>a lot of them<Legacy><ns:Legacies>");
-    XML xml2 = new XML("<ns:Legacies><Legacy year=10 version=\"3.0.0\">a lot of them<Legacy><ns:Legacies>");
-    assert(xml1.equals(xml2)); // not throw Exception
+import com.jarunj.xml.XML;
+.
+.
+.
+XML xml1 = new XML("<ns:Legacies><Legacy version=\"3.0.0\" year=10>a lot of them<Legacy><ns:Legacies>");
+XML xml2 = new XML("<ns:Legacies><Legacy year=10 version=\"3.0.0\">a lot of them<Legacy><ns:Legacies>");
+assert(xml1.equals(xml2)); // not throw Exception
 ```
