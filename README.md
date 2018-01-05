@@ -13,7 +13,7 @@ add this in project's pom.xml:
 <dependency>
   <groupId>com.jarunj.xml</groupId>
   <artifactId>xml-compare</artifactId>
-  <version>0.7.1</version>
+  <version>0.7.2</version>
 </dependency>
 ```
 
