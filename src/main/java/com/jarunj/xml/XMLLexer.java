@@ -1,5 +1,7 @@
 package com.jarunj.xml;
 
+import com.sun.org.apache.bcel.internal.generic.NEW;
+
 import java.text.ParseException;
 import java.util.HashSet;
 import java.util.Set;
@@ -167,7 +169,8 @@ public class XMLLexer implements XMLReserved {
     static {
         WhiteSpaceSet.add(Space);
         WhiteSpaceSet.add(Tab);
-        WhiteSpaceSet.add(NewLine);
+        WhiteSpaceSet.add(LF);
+        WhiteSpaceSet.add(CR);
     }
 
     private static boolean digit(CharIterator stream) {
