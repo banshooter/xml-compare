@@ -40,6 +40,7 @@ public class XMLParser {
                             } else {
                                 children.put(node, 1);
                             }
+                            XMLLexer.skipCommentAndWhiteSpace(stream);
                         }
                         return new Node(tagName, attrs, children);
                     } else {

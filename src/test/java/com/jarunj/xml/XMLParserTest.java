@@ -59,6 +59,13 @@ public class XMLParserTest {
     }
 
 
+    @Test
+    public void testParseSimpleNodeWithAChildWithEmptyValueAndWithWhiteSpaceAfterChild() throws IOException, ParseException {
+        Node a = new Node("A");
+        Node expected = new Node("X").addNode(a);
+        Assert.assertEquals(expected, XMLParser.parse("<X>\r\t<A></A>\r</X>"));
+    }
+
     @Test(expected = ParseException.class)
     public void testNoEndStartThrow() throws IOException, ParseException {
         XMLParser.parse("<T><ERROR error=500</T>");
