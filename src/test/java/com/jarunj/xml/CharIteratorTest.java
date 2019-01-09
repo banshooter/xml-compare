@@ -1,5 +1,6 @@
 package com.jarunj.xml;
 
+import com.jarunj.text.CharIterator;
 import org.junit.Test;
 import org.junit.Assert;
 import java.io.IOException;

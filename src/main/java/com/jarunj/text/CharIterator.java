@@ -1,4 +1,4 @@
-package com.jarunj.xml;
+package com.jarunj.text;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -17,6 +17,8 @@ public class CharIterator implements Iterator<Character> {
     private int offset = 0;
     private StringBuilder sb;
     private String s = null;
+    private int line = 0;
+    private int column = 0;
 
     private void fetch() throws IOException {
         sb.setLength(0);
@@ -62,7 +64,7 @@ public class CharIterator implements Iterator<Character> {
             } else {
                 this.s = this.s.substring(1);
             }
-            offset++;
+            assignLineAndOffset(x);
             return x;
         } else {
             if (sbIndex == sb.length()) {
@@ -71,8 +73,19 @@ public class CharIterator implements Iterator<Character> {
             if(sbIndex == sb.length()) {
                 throw new NoSuchElementException();
             }
-            offset++;
-            return sb.charAt(sbIndex++);
+            char x = sb.charAt(sbIndex++);
+            assignLineAndOffset(x);
+            return x;
+        }
+    }
+
+    private void assignLineAndOffset(char x) {
+        if (x == '\n') {
+            this.line++;
+            this.column = 0;
+        } else {
+            this.offset++;
+            this.column++;
         }
     }
 
@@ -116,6 +129,20 @@ public class CharIterator implements Iterator<Character> {
         }
     }
 
+    public boolean lookAheadEquals(String s) {
+        if (s == null) throw new IllegalArgumentException("s is null");
+        return this.hasNext() && s.equals(this.lookAhead(s.length()));
+    }
+
+    public boolean lookAheadEqualsAndSeek(String s) {
+        if (s == null) throw new IllegalArgumentException("s is null");
+        boolean result = this.lookAheadEquals(s);
+        if (result) {
+            this.forward(s.length());
+        }
+        return result;
+    }
+
     public void forward(int charSize) {
         for(int i = 0; i < charSize; i++) next();
     }
@@ -125,4 +152,9 @@ public class CharIterator implements Iterator<Character> {
         return offset;
     }
 
+    public int getLine() { return line; }
+
+    public int getColumn() { return column; }
+
+    public String getStringLocation() { return "{line:"+getLine()+", column:"+getColumn()+"}"; }
 }

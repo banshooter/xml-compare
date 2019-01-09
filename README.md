@@ -3,9 +3,9 @@
 **xml-compare** is a Java library for comparing 2 XMLs with condition to ignore sequence of children nodes and sequence of attributes.
 
 
-**xml-compare** implemented by customized lexer and parser for educational purpose.
+**xml-compare** implemented by customized lexer and parser from scratch without any additional library, so its jar package is very small.
 
-xml-compare is mainly built for using in unit tests to comparing 2 xmls and also as an example of simple and stupid lexer and parser of XML.
+xml-compare is mainly built for using in unit tests to comparing 2 XMLs and also as an example of simple and stupid lexer and parser of XML.
 
 ## Example
 add this in project's pom.xml:
@@ -13,7 +13,7 @@ add this in project's pom.xml:
 <dependency>
   <groupId>com.jarunj.xml</groupId>
   <artifactId>xml-compare</artifactId>
-  <version>0.7.2</version>
+  <version>0.7.3</version>
 </dependency>
 ```
 

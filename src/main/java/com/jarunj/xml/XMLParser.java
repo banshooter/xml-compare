@@ -1,5 +1,7 @@
 package com.jarunj.xml;
 
+import com.jarunj.text.CharIterator;
+
 import java.io.StringReader;
 import java.text.ParseException;
 import java.util.HashMap;
@@ -20,7 +22,7 @@ public class XMLParser {
         if (XMLLexer.tagBegin(stream) ) {
             String tagName = XMLLexer.elementNameExpr(stream);
             if(tagName == null) {
-                throw new ParseException("expect tag after <", stream.getOffset());
+                throw new ParseException(stream.getStringLocation() + ": expect tag after <", stream.getOffset());
             }
             Map<String, String> attrs = attributes(stream);
             if (XMLLexer.tagEndWithNodeEnd(stream)) {
@@ -47,26 +49,26 @@ public class XMLParser {
                         if (nodeEnd(stream, tagName)) {
                             return new Node(tagName, attrs, value);
                         } else {
-                            throw new ParseException("expected </" + tagName +">", stream.getOffset());
+                            throw new ParseException(stream.getStringLocation() + ": expect </" + tagName +">", stream.getOffset());
                         }
                     }
                 }
             } else {
-                throw new ParseException("Expect > ", stream.getOffset());
+                throw new ParseException(stream.getStringLocation() + ": expect > ", stream.getOffset());
             }
         } else {
-            throw new ParseException("Expect < ", stream.getOffset());
+            throw new ParseException(stream.getStringLocation() + ": expect < ", stream.getOffset());
         }
     }
 
     private static boolean nodeEnd(CharIterator stream, String tagName) throws ParseException {
-        if (stream.hasNext() && XMLLexer.lookAheadEqualsAndSeek(stream, "</")) {
+        if (stream.hasNext() && stream.lookAheadEqualsAndSeek("</")) {
             XMLLexer.skipCommentAndWhiteSpace(stream);
-            if (stream.hasNext() && XMLLexer.lookAheadEqualsAndSeek(stream, tagName)) {
+            if (stream.hasNext() && stream.lookAheadEqualsAndSeek(tagName)) {
                 XMLLexer.skipCommentAndWhiteSpace(stream);
                 return XMLLexer.tagEnd(stream);
             } else {
-                throw new ParseException("expect " + tagName, stream.getOffset());
+                throw new ParseException(stream.getStringLocation() + ": expect " + tagName, stream.getOffset());
             }
         } else {
             return false;
@@ -75,8 +77,8 @@ public class XMLParser {
 
     private static String nodeValue(CharIterator stream) throws ParseException {
         XMLLexer.skipCommentAndWhiteSpace(stream);
-        StringBuilder sb = new StringBuilder();
         if (!XMLLexer.isTagBegin(stream)) {
+            StringBuilder sb = new StringBuilder();
             while(!XMLLexer.isTagBegin(stream)) {
                 sb.append(stream.next());
             }
@@ -90,12 +92,11 @@ public class XMLParser {
         Map<String, String> result = new TreeMap<String, String>();
         String attributeName = XMLLexer.elementNameExpr(stream);
         while(null != attributeName) {
-            String value = null;
             XMLLexer.skipCommentAndWhiteSpace(stream);
             if (stream.isNextChar('=')) {
                 stream.next();
                 XMLLexer.skipCommentAndWhiteSpace(stream);
-                value = XMLLexer.stringExpr(stream);
+                String value = XMLLexer.stringExpr(stream);
                 if (value == null) {
                     value = XMLLexer.numberExpr(stream);
                     if (value != null &&
@@ -104,15 +105,15 @@ public class XMLParser {
                             !XMLLexer.isTagEnd(stream) &&
                             !XMLLexer.isTagEndWithNodeEnd(stream)
                             ) {
-                        throw new ParseException("invalid numeric", stream.getOffset());
+                        throw new ParseException(stream.getStringLocation() + ": invalid numeric", stream.getOffset());
                     }
                 }
                 if (value == null) {
-                    throw new ParseException("expect attribute's value", stream.getOffset());
+                    throw new ParseException(stream.getStringLocation() + ": expect attribute's value", stream.getOffset());
                 }
                 result.put(attributeName, value);
             } else {
-                throw new ParseException("expect = ", stream.getOffset());
+                throw new ParseException(stream.getStringLocation() + ": expect = ", stream.getOffset());
             }
             attributeName = XMLLexer.elementNameExpr(stream);
         }

@@ -9,11 +9,4 @@ interface XMLReserved {
     public static final String TagEndWithNodeEnd = "/>";
     public static final String CommentBegin = "<!--";
     public static final String CommentEnd = "-->";
-
-
-    public static final Character Space = ' ';
-    public static final Character Tab = '\t';
-    public static final Character CR = '\n';
-    public static final Character LF = '\r';
-
 }
