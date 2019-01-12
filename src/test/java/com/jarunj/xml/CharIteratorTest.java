@@ -37,7 +37,7 @@ public class CharIteratorTest {
             testObject.next();
             times++;
         }
-        Assert.assertEquals(times, s.length());
+        Assert.assertEquals(s.length(), times);
         Assert.assertFalse(testObject.hasNext());
     }
 
@@ -63,7 +63,7 @@ public class CharIteratorTest {
         String s = "1234567890ABCDEF";
         CharIterator testObject = new CharIterator(new StringReader(s), 10);
         for (int timesOfNext = 0; timesOfNext < 10; timesOfNext++) {
-            for ( int i = 0; i < 10; i++) {
+            for ( int i = 0; i < 100; i++) {
                 Assert.assertEquals(
                         s.substring(timesOfNext, Math.min(s.length(), timesOfNext+i+1)),
                         testObject.lookAhead(i+1)

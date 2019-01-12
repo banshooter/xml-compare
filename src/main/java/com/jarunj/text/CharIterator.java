@@ -16,19 +16,28 @@ public class CharIterator implements Iterator<Character> {
     private int sbIndex = 0;
     private int offset = 0;
     private StringBuilder sb;
-    private String s = null;
     private int line = 0;
     private int column = 0;
+    private boolean canRead = true;
+
+    private boolean outOfChar() {
+        if (sbIndex == sb.length()) {
+            sb.setLength(0);
+            sbIndex = 0;
+            return true;
+        }
+        return false;
+    }
 
     private void fetch() throws IOException {
-        sb.setLength(0);
-        sbIndex = 0;
-        if (this.reader.read(buffer) > 0) {
+        if (canRead && this.reader.read(buffer) > 0) {
             buffer.flip();
             while(buffer.hasRemaining()) {
                 sb.append(buffer.get());
             }
             buffer.clear();
+        } else {
+            canRead = false;
         }
     }
 
@@ -46,37 +55,22 @@ public class CharIterator implements Iterator<Character> {
     }
 
     public boolean hasNext() {
-        if (this.s != null) {
-            return true;
-        } else {
-            if (sbIndex == sb.length()) {
-                fetchIgnoreException();
-            }
-            return sbIndex != sb.length();
+        if (outOfChar()) {
+            fetchIgnoreException();
         }
+        return sbIndex < sb.length();
     }
 
     public Character next() {
-        if (this.s != null) {
-            char x = this.s.charAt(0);
-            if (this.s.length() == 1) {
-                this.s = null;
-            } else {
-                this.s = this.s.substring(1);
-            }
-            assignLineAndOffset(x);
-            return x;
-        } else {
-            if (sbIndex == sb.length()) {
-                fetchIgnoreException();
-            }
-            if(sbIndex == sb.length()) {
-                throw new NoSuchElementException();
-            }
-            char x = sb.charAt(sbIndex++);
-            assignLineAndOffset(x);
-            return x;
+        if (outOfChar()) {
+            fetchIgnoreException();
         }
+        if(outOfChar()) {
+            throw new NoSuchElementException();
+        }
+        char x = sb.charAt(sbIndex++);
+        assignLineAndOffset(x);
+        return x;
     }
 
     private void assignLineAndOffset(char x) {
@@ -95,24 +89,13 @@ public class CharIterator implements Iterator<Character> {
     }
 
     public String lookAhead(int size) {
-        assert(size <= sb.capacity());
-        if ( s != null) {
-            String more = "";
-            if (size > this.s.length()) {
-                int moreSize = size - this.s.length();
-                more = sb.substring(0, Math.min(sb.length(), moreSize));
-            }
-            return this.s.substring(0, Math.min(size,s.length())) + more;
-        } else {
-            if (sbIndex+size > sb.length()) {
-                int more = sbIndex+size - sb.length();
-                this.s = sb.substring(sbIndex);
-                fetchIgnoreException();
-                return this.s + sb.substring(sbIndex, Math.min(sbIndex+more, sb.length()));
-            } else {
-                return sb.substring(sbIndex, Math.min(sbIndex+size,sb.length()));
-            }
+        if (sbIndex+size <= sb.length()) {
+            return sb.substring(sbIndex, Math.min(sbIndex + size, sb.length()));
         }
+        while (canRead && sbIndex+size > sb.length()) {
+            fetchIgnoreException();
+        }
+        return sb.substring(sbIndex, Math.min(sbIndex + size, sb.length()));
     }
 
     public boolean isNextChar(char c) {
